@@ -13,14 +13,16 @@
 - 원래 자바스크립트는 웹브라우저 안에서만 돌아가는 언어이다. HTML을 좀 더 자유롭게 다루기 위해 만들어진 언어라고 볼 수 있다. 웹브라우저 안에서만 작동하는 한계가 있었는데 이를 웹브라우저 바깥에서도 돌아갈 수 있게 도와준 것이 Node.js라고 할 수 있다. 정확한 명칭은 *Javascript runtime environment*이다.
 
 - Node.js 설치확인
-
-        node -v
-
+  ```
+  node -v
+  ```
 - npm package 생성
 
   > npm(Node Package Manager) 은 자바스크립트 프로그래밍 언어를 위한 패키지 관리자
 
-        npm init
+  ```
+  npm init
+  ```
 
   - 설치를 하고 나면 여러 파일 중에 *pakage.json*이라는 파일이 생성된다. 이는 프로젝트 정보와 여러개의 dependency를 관리하는 문서이다.
 
@@ -37,9 +39,11 @@
 
 - Mongoose
 
-  > mongoDB를 편하게 쓸 수 있는 Object Modeling Tool
+  mongoDB를 편하게 쓸 수 있는 Object Modeling Tool이다.
 
-        npm install mongoose -save
+  ```
+  npm install mongoose -save
+  ```
 
 ## **2-2 MongoDB Model & Schema 생성**
 
@@ -56,26 +60,26 @@
 ### **3-1. Git 설치**
 
 - 설치확인
-
-        git --version
-
+  ```
+  git --version
+  ```
 - git 저장소 생성
-
-      git init
-
+  ```
+  git init
+  ```
 - git에서 staging file 확인
-
-        git status
-
+  ```
+  git status
+  ```
 - git commit 내역 확인
-
-        git log
-
+  ```
+  git log
+  ```
 - git 저장소 저장 순서
-
-        git add .
-        git commit -m "프로젝트 이름"
-
+  ```
+  git add .
+  git commit -m "프로젝트 이름"
+  ```
 - git에 저장하지 않을 파일들은 gitignore에 이름을 써준다.(for 개인정보 보호)
 
 ### **3-2. GitHub SSH 연동**
@@ -87,12 +91,12 @@
     - HTTPS
       - GitHub의 아이디와 비밀번호로 인증하여 서버와 연결
     - SSH
-
       - SSH 설정 확인
-
-              ls -a ~/.ssh
-              # id_rsa
-              # is_rsa.pub (public key)
+      ```
+      ls -a ~/.ssh
+      # id_rsa
+      # is_rsa.pub (public key)
+      ```
 
 - SSH Key를 이용하여 서버와 연결
   - 개인키(컴퓨터가 가지고있는 키)
@@ -109,8 +113,9 @@
 - Body parsing
   - client가 보낸 body 데이터를 분석하는 것을 parse라고 한다. 이후 req.body로 출력해주는 도구를 body-parser라고 한다.
 - Body-parser 설치방법
-
-        npm install body-parser --save
+  ```
+  npm install body-parser --save
+  ```
 
 ### **4-2. Post Man**
 
@@ -122,9 +127,11 @@
 - 소스 변경을 감지하여 자동으로 서버를 재시작해줌
 - nodemon 설치
 
-        # --save(node_modules에  설치, pakage.json 업데이트)
-        # -dev(앱을 실질적으로 동작하기에 필요하지 않은 것)
-        npm install nodemon --save-dev
+  ```
+  # --save(node_modules에  설치, pakage.json 업데이트)
+  # -dev(앱을 실질적으로 동작하기에 필요하지 않은 것)
+  npm install nodemon --save-dev
+  ```
 
 - 설치 후 package.json script에 서버 시작 명령어 추가
 
@@ -133,27 +140,175 @@
 - mongoDB 비밀번호 보호 -코드에 비밀번호가 들어가기 때문에 비밀번호가 담긴 코드를 메인 파일이 아닌 다른 파일에 저장한 후 그 비밀번호가 들어간 파일을 한 폴더에 모아서 그 폴더만 .gitignore 파일에 넣어준다. 이러면 원격 저장소에서 보이지 않는다.
   - 개발환경이 로컬인지 배포모드인지에 따라서도 다르게 넣어줘야하니 주의해야한다. (ex. heroku 서비스를 통해 배포할 때)
 - 환경변수 설정
-
-        # Local 환경
-        process.env.NODE_ENV = developement
-        # Deploy(배포) 환경
-        process.env.NODE_ENV = production
+  ```
+  # Local 환경
+  process.env.NODE_ENV = developement
+  # Deploy(배포) 환경
+  process.env.NODE_ENV = production
+  ```
 
 ### **4-5. Bcrypt(비밀번호 암호화)**
 
--
+- 비밀번호 암호화를 하는 이유
+  - 개인정보보호법으로 지정되어있기 때문에 암호화를 해야한다. 또한 관리자, DB 침입자(?)가 비밀번호를 직접 알지 못하도록 하게 하는 기능도 있는 것 같다.
+- [Bycrypt 설치](https://www.npmjs.com/package/bcrypt)
+  ```
+  npm install bcrypt --save
+  ```
+- 비밀번호 암호화 순서
+
+  - DB 등록전에 비밀번호를 암호화(해싱) 시켜야 DB에 실제 비밀 번호가 보이지 않는다.
+  - 해싱된 비밀번호를 저장할 때는 salt라는 우리가 모르는 string과 함께 raw 비밀번호를 저장한다. 그냥 Hashing된 비밀번호를 저장하게된다면 rainbow table(유출된 Hashing 결과값을 모아놓은 사전) 이용하여 raw password를 알게 될 수도 있기 때문이다. 그리고 hash 함수 특성상 text가 1, 2자라도 다르면 결과값이 완전히 달라지기 때문에 역으로 비밀번호 찾는 것을 방지하고자 salting을 한다.
+
+    **※ `비밀번호`를 바꿀 때만 작동할 수 있게 설정해야한다. 다른 회원정보를 바꿀 때마다 작동이 될 수도 있으니 주의 바람.**
+
+    ```javascript
+    const bcrypt = require("bcrypt");
+    const saltRounds = 10;
+
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+        // Store hash in your password DB with salt.
+      });
+    });
+    ```
+
+  - bcrypt로 암호화된 test용 비밀번호의 일부분이다. 크게 $로 구분하여 세 부분으로 나뉜다.
+    ```
+    $2b$10$8uMdF.wmQK.F57A9eUo7j...."
+    ```
+    - $2b : bcrypt의 버전을 나타낸다.
+    - $10 : round를 나타낸다. [비밀번호+salt]에 계속 salt를 합쳐 해싱한 횟수라고한다.
+    - 암호화된 부분: [...[비밀번호+salt]+salt...]가 해싱된 부분이다!
 
 ## **5. 로그인 기능**
 
+### **5-0. Login Route 만든다.**
+
+- 로그인을 다루는 라우터를 만들어서 로그인 요청을 처리한다. 크게 4단계로 나뉜다.
+
+### **5-1. DB에서 로그인을 요청한 E-mail을 찾는다.**
+
+```javascript
+// email을 찾아주는 mongoDB 함수
+User.findOne();
+```
+
+### **5-2. E-mail을 찾으면 비밀번호가 같은지 확인한다.**
+
+- 확인할 때는 Bcrypt를 활용하여 비밀번호 입력값과 암호화된 비밀번호가 같은지 확인한다.
+
+  ```javascript
+  // Compare Method 만들기
+  userSchema.methods.comparePassword = function (plainPassword, cb) {
+    // plainPassword와  암호화된 비밀번호랑 같은지 확인
+    bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
+      if (err) return cb(err);
+      cb(null, isMatch);
+    });
+  };
+  ```
+
+### **5-3. E-mail, 비밀번호가 같다면 Token을 생성한다.**
+
+- [JSONWEBTOKEN](https://www.npmjs.com/package/jsonwebtoken)를 이용한다. 이는 추후 페이지 이동시 Authorization을 위한 것이다.
+
+  ```javascript
+  // 토큰 생성 라이브러리
+  npm install jsonwebtoken --save
+  ```
+
+### **5-4. 생성된 토큰을 Cookie에 저장한다.**
+
+```javascript
+res.cookie("x_auth", user.token).status(200);
+```
+
 ## **6. Auth 기능**
 
+### **6-0. Auth 라우터를 생성한다.**
+
+- 페이지를 이동할 때마다 로그인 여부와 관리자 유저인지 등을 체크해야한다.
+- 글을 쓸 때나 지울 때 권한이 있는 지를 체크해야한다.
+- 여기서는 `server` 파일에 `middleware` 파일에 코드를 저장해 두었다. 서버에 request를 하고 response를 받아오는 과정 사이에 권한을 확인하는 용도이기 때문이다.
+
+### **6-1. Cookie에 있는 Token을 서버에서 복호화한다.**
+
+```javascript
+jwt.verify(token, "secretToken", function (err, decoded))
+```
+
+### **6-2. 복호화 후 나온 User ID를 이용하여 DB에서 유저를 찾는다.**
+
+```javascript
+user.findOne({ _id: decoded, token: token }, function (err, user) {
+  if (err) return cb(err);
+  cb(null, user);
+});
+```
+
+### **6-3. DB에 저장된 User의 Token이 Cookie Token과 일치하는지 확인한다.**
+
+```javascript
+let token = req.cookies.x_auth;
+// 토큰을 복호화 한  후 유저를 찾는다.
+User.findByToken(token, (err, user) => {
+  if (err) throw err;
+  if (!user) return res.json({ isAuth: false, error: true });
+
+  req.token = token;
+  req.user = user;
+  next();
+});
+```
+
+### **6-4. Token이 일치하면 해당하는 유저의 정보를 선별해서 보내준다.**
+
+```javascript
+res.status(200).json({
+  _id: req.user._id,
+  isAdmin: req.user.role === 0 ? false : true,
+  isAuth: true,
+  email: req.user.email,
+  name: req.user.name,
+  lastname: req.user.lastname,
+  role: req.user.role,
+  image: req.user.image,
+});
+```
+
 ## **7. 로그아웃 기능**
+
+### **7-0. Logout 라우터를 만든다.**
+
+- 로그인을 하게되면 server의 DB, client의 cookie에 토큰이 생기게 된다. 이후 이 두 곳에 생긴 토큰이 같은지 비교하며 페이지를 이동할 때마다 사용자에게 맞는 권한을 부여한다. DB에서 사용자의 토큰을 지우면 사용자 정보를 비교할 수 없다. 즉 DB상의 유저인지 파악할 수 없기 때문에 로그인을 안한 사용자라고 서버는 인식하게 된다. 이를 로그아웃이라고 한다.
+
+### **7-1. 로그아웃 하려는 유저를 DB에서 찾는다.**
+
+- 유저를 찾고 토큰을 비교한다. auth의 과정이 필요하다.
+
+### **7-2. 유저의 Token을 DB에서 지워준다.**
+
+- cookie를 지우면 client 상에서 로그아웃이 된 것처럼 보이겟지만 이렇게 하면 DB상에 토큰이 아직 남아있기 때문에 다음 로그인 시 에러가 난다. 다음 로그인을 위해서는 로그아웃 할 때 서버의 DB에서 user의 토큰을 지워야 한다.
+
+  ```javascript
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).send({ success: true });
+  });
+  ```
 
 # FE
 
 ## **1. React JS**
 
+### **1-1. React JS**
+
+### **1-2. Virtual DOM**
+
 ## **2. Create React App**
+
+### **2-0.리액트 시작하기**
 
 ## **3. React Router Dom**
 
