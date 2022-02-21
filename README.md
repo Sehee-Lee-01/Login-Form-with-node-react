@@ -4,8 +4,6 @@
 
 - 바꾸지 않고 계속 재사용할 수 있는 코드를 말한다.
 
-# BE
-
 ## <b>1. Node.js & Express.js</br>
 
 ### **1-1. Node.js**
@@ -298,53 +296,273 @@ res.status(200).json({
   });
   ```
 
-# FE
+## **8. React JS**
 
-## **1. React JS**
+### **8-1. React JS 소개**
 
-### **1-1. React JS**
+- 2013년도 Facebook에 의해 만들어진 javascript 라이브러리이다.
+- 모듈과 비슷한 component로 이루어져 있어 재사용성이 뛰어나다.
+- Virtual DOM을 사용하여 기존 DOM을 관리한다.
 
-### **1-2. Virtual DOM**
+### **8-2. Virtual DOM**
 
-## **2. Create React App**
+1. Real DOM
 
-### **2-0.리액트 시작하기**
+- 한 가지 요소를 update 하려면 전체를 reload 해야한다.
 
-## **3. React Router Dom**
+2. Virtual DOM
 
-## **4. Ant Design(CSS Framework)**
+- Real DOM의 복사본이라고 보면된다.
+- 한가지 요소를 update 하려면 그 요소만 DOM에서 바꿔준다.
+  - JSX(HTML과 비슷)을 랜더링하면 Virtual DOM이 update된다.
+  - 이전 Virtual DOM에서 찍어둔 Snapshot과 비교하여 바뀐부분을 찾는다(diffing).
+  - 바뀐부분만 Real DOM에서 바꿔준다.
 
-## **5. Redux**
+### **8-3. Create React App**
 
-## **6. React Hooks**
+#### **8-3-1. 리액트 앱 실행**
 
-## **7. HOC**
+- 원래는 React 앱을 실행하기 위해선 webpack, babel 같은 것을 설정해야했다.
+- 요즘은 creatr-react-rpp 명령어 한 줄로 바로 리액트 앱을 실행할 수 있다.
 
-# FE & BE
+  ```
+  # '.'은 폴더 없이 만든다는 의미
+  npx create-react-app .
+  ```
 
-## **1. Axios**
+- babel
+  - 최신 자바스크립트 문법을 지원하지 않는 브라우저를 위해서 구형 브라우저에서 최신 자바스크립트 문법을 돌 수 있게 변환 시켜준다.
+- webpack
+  - 최신 자바스크립트 앱의 정적 모듈 번들러이다. 디펜던시가 있는 모듈들을 참고하여 디펜던시 그래프를 만들고 이를 기반으로 정적 자산 번들을 만든다.
 
-## **2.CORS**
+#### **8-3-2. npm & npx**
 
-- Proxy Server
+-NPM(Node Pakage Manager)
 
-## **3. Concurrently**
+- 오픈소스 nodeJS 프로젝트를 저장하고 있는 온라인 저장소
+- 패키지 설치, 버전관리, 디펜던시 관리를 목적으로 한다.
 
-## **3. Concurrently**
+- NPM install Locally vs Globally
+  - Locally: 프로젝트 안의 `./node_modules/.bin`에 저장
+  - Globally: Windows `%AppData%/npm`에 저장
+    - 원래 이 방식으로 다운로드를 했지만 npx를 이용해서 npm registry에서 CRA를 찾아 이용할 수 있다.
+    ```
+    # 예전
+    npm install -g create-react-app
+    # npx이용
+    npx create-react-app .
+    ```
+- NPX의 장점
+  - Disk Space 낭비 방지
+  - 최신버전 사용 가능
 
-## 진행하면서 막힌 점
+#### **8-3-3. CRA 구조**
 
-##- token cookie(auth 인증)
+- `public` folder
+  - `index.html`: Page template
+  - `index.html`에만 쓰일 수 있는 파일을 담는 곳이다.
+- `src` folder
+  - `index.js`: javascript entry point
+  - js, css 파일을 보관하는 곳이다. webpack는 `src` 폴더 안의 파일을 처리한다.
+- CRA 구조
+
+```
+my-app/
+  README.md
+  node_modules/
+  pakage.json
+  public/
+    index.html
+    favicon.co
+  src/
+    App.css
+    App.js
+    App.test.js
+    index.css
+    index.js
+    logo.svg
+
+```
+
+- 현 프로젝트의 구조
+
+  - `_actions/`, `_reducer/`: redux를 위한 폴더
+  - `components/views/`: Page를 넣는다.
+  - `components/views/Sections/` 해당 페이지에 관련된 css파일이나 component들을 넣는다.
+  - `App.js`: routing 관련 일을 처리한다.
+  - `Config.js`: 환경변수를 저장한다.
+  - `hoc/`: Higher Order Component의 약자. 여러 군데에서 쓰일 수 있는 것들을 넣어서 어디서든 쓸 수 있게 해줌.
+
+  ```
+  src/
+    _actions/
+    _reducer/
+    components/views/
+    components/views/Sections/
+  App.js
+  Config.js
+  hoc/
+  utils/
+  ```
+
+### **8-4. HOC**
+
+- Higher Order Component
+- 기존 컴포넌트를 새로운 컴포넌트로 바꿔주는 함수.
+- 각 페이지에 Auth 기능을 첨부할 때 사용. 들어갈 수 있는 페이지에 대한 통제 가능.
+
+### **8-5. React Router Dom**
+
+- 페이지를 이동할 때 사용
+  - `src/index.js` 파일에 있음.
+- Dpendency 다운로드
+
+```
+npm install react-router-dom --save
+```
+
+## **9. Axios**
+
+- 프론트와 서버가 구축되면 해당 포트가 다를 것이다.
+  - front: port 3000
+  - back: port: 5000
+- 이 두 포트 사이로 데이터의 res/req가 이루어진다. 이 때 이용하는 것이 `Axios`(ReactJS)다. (jQurey의 Ajax)
+
+```
+npm install axios --save
+```
+
+### **9-1. CORS 이슈**
+
+- CORS: Cross-Origin Resource Sharing
+- Axios만으로는 아무 설정 없이 request를 보낼 수 없다. CORS 보안 정책 때문이다.
+
+### **9-2. Proxy Server**
+
+- CORS 정책 이슈를 해결할 여러가지 방법중 Proxy 설정 법이 있다.
+- 아이피를 임의로 바꿀 수 있다. 인터넷에 접근 하는 사람의 IP를 모르게 할 수 있다.
+- 보내는 데이터도 임의로 바꿀 수 있다.
+- 방화벽 기능, 웹 필터 기능, 캐쉬 데이터, 공유 데이터 제공 가능
+- proxy server 사용이유
+  - 사내, 가정 내 인터넷 사용 제어
+  - 캐쉬를 이용해 더 빠은 인터넷 이용 제공
+  - 더 나은 보안 제공
+  - 이용 제한된 사이트 접근 가능
+
+### **9-3. Concurrently**
+
+- 여러 개의 명령어를 동시에 작동시킬 수 있게 해주는 툴.
+- `pakage.json`에 입력
+
+```
+"dev": "concurrently \"command1 arg\" \"command2 arg\""
+```
+
+## **10. Redux**
+
+### **10-1. Redux란?**
+
+- 예측가능한 state 컨테이너.
+- state 상태 관리 라이브러리
+
+### **10-2. ReactJS에서의 변수 관리**
+
+- props -부모 컴포넌트에서 물려받을 수 있다.
+  - 자식 컴포넌트에서는 내용을 바꿀 수 없고 부모 컴포넌트에서만 내용을 바꿀 수 있다.
+- state
+  - 컴포넌트 내부에서 선언되어 스스로 관리하는 것.
+  - 값을 그 컴포넌트 안에서 바꿀 수 있고 re-randering된다.
+    - 검색창에 글을 입력할 때 글이 변하는 것이 state를 바꾸는 예이다.
+
+### **10-3. Redux 데이터 플로우**
+
+- State를 관리하는 툴.
+  1. `Action`: 어떤 일이 일어났는지 묘사.
+  2. `Reducer(function)`: 이전 state 값과 action값을 반영하여 새로운 state 값 리턴.
+  - pure function이기 때문에 내부에서 이 행동을 조심해야한다.
+    - argument 바꾸기
+    - API 호출이나 라우팅 이동 같은 side effect 수행
+    - pure function가 아닌 함수를 부르기
+  3. `Store`: object. App 내의 모든 state tree를 가지고 있음. 오직 action을 포착했을때 state를 바꿀 수 있음.
+  4. `React Component`: Subscribe.
+  5. `Action(go to 1.)`: Dispatch(action).
+
+### **10-4. Redux 설치**
+
+- Dpendency
+  1. redux
+  2. react-redux
+  3. redux-promis
+  4. redux-thunk
+- redux 기본구조(Scaffolding) 만들기
+  - <Privider/>는 hoc로 redux에서 제공한 것이다. 이것 때문에 react 요소에서 redux를 사용할 수 잇다.
+
+## **11. React Hooks**
+
+### **11-0. Component**
+
+- Class형(과거에는 대부분 사용)
+
+  - Provide more features
+  - More Code
+  - More Complex Code
+  - Slower Performance
+
+- Function형
+  - Provide less features(state, lifeCycle 관련 기능 사용 불가능)
+  - Less code
+  - Simpler Code
+  - Faster Performance
+
+### **11-1. React Hook?**
+
+- Hook은 함수형 컴포넌트의 한계를 개선해주는 툴이다.
+  - state, lifeCycle 관련 기능 사용 가능
+  - useState, useEffect
+
+## **12. CSS Framework**
+
+- Ant Design 설치
+
+```
+npm install antd --save
+```
+
+## **13. 진행하면서 막힌 점**
+
+### **- token cookie(auth 인증)**
+
 당시 클라이언트가 없어 포스트맨으로 로그인을 요청하고 로그아웃 요청을 테스트 하였다. 이 과정을 이틀에 걸쳐서 하다보니 로그인을 하고 DB에 토큰을 받은 것을 깨달은 후 컴퓨터를 종료하고 다음날 DB의 token만 보고 로그아웃을 시도한 것이 원인이었다.
 이렇게 되면 DB에는 token이 있지만 브라우저(당시에는 포스트맨)에는 쿠키가 남아있지 않기 때문에(쿠키는 날라가는 것) auth인증을 할 수 없엇다. 당시는 쿠키가 어떤 기능인줄 모르고 썻던 것.
 
-##- javascript, node.js
+### **- javascript, node.js**
+
 주로 파이썬을 사용하다가 웹프로젝트를 빠르게 만들기 위해 node.js를 사용하게 되었다. 파이썬과 다른 점이 많아 기본기를 다루는 영상, 문서 등을 게속 찾아보면서 공부하다보니 중간중간 끊기는 부분이 많았다.
 특히, 호이스팅, var, let, const, 콜백함수, 비동기처리 등을 중심으로 많이 찾아봤다. 파이썬에서는 분명 인자나 함수를 사용하기 전에 선언, 초기화를 해줘야하는데 자바스크립트는 호이스팅, 그리고 var의 성격 때문에 코드 스크립트 앞부분에 다 쓰지 않아도 된다는 것이다. 그런 점이 처음에는 혼돈의 카오스였다. 그리고 파이썬과 또 다른점은 비동기처리가 된다는 것이었다. 파이썬은 중간부분이 느리게 작동한다고 해도 그 일을 다 마쳐야 다음 일을 진행하는 특성이 있는데 자바스크립트에서는 비동기적으로 코드가 돌아간다는 것이다. 그래서 콜백함수, 셋타임아웃, 프로미스 등이 나오게 된 것이라고 한다. 비동기적 처리를 알려하니 콜백, 셋타임, 프로미스 등 줄줄이 개념이 나와 꽤나 애를 먹었다.
 
-##- 웹 동작원리
+### **- 웹 동작원리**
+
 웹을 만들고 싶다! 막연한 생각에 뛰어든 것이라서 처음에는 거의 강의 영상을 따라치기만 하고 동작이 똑같이 되는지 안되는지만 확인했었다. 하지만 진정한 디벨로퍼가 되려면 각 단계에 대한 당위성을 이해해야한다고 생각했다. 그래서 강의를 중간중간 멈추고 하루종일 웹 동작원리 HTTP(S), DNS, Clienr/Server, DB 등에 관련한 영상과 글을 보았다. 너무나도 긴여정이었다. 덕분에 방향은 잡을 수 있었다. 웹 관련 기술도 찾아보다보니 도커, 아마존 웹서비스 등 많이 들어보았던 것들이 대강 어디에 쓰이는 지는 감이 오는 것 같다.
 
-react router ver 6.
+### **- react router ver 6.**
+
+강의를 볼 때 구 버전으로 촬영이 된 강의를 보다보니 새로운 버전과 맞지 않는 부분이 있었다. 이를 찾기 위해 꽤나 시간이 걸렸다. 그래도 구 버전과 신 버전의 차이점을 알 수 있는 좋은 기회 였던 것 같다.
+
+```javascript
+// 구 버전의 history method가 작동이 안됨.
 props.history.push("/");
+// 페이지를 이동하려면 새로운 버전에서는 이렇게 써야함.
 navigate("/");
+```
+
+### **- 함수형 컴포넌트와 클래스 컴포넌트**
+
+함수형과 클래스형의 차이를 아직은 대략적으로 이해를 하는 상황이다. 특히 React component의 라이프 사이클에 대한 이해가 아직 부족하다는 느낌이 많이 들었다. 다음에 공부할 때는 이 부분을 집중적으로 공부해야겠다.(React Hook과 함께!)
+
+### **- Redux**
+
+리덕스 이전에 props와 state에 대한 정보를 알 수 있었다. 그리고 특히 리엑트 Hook 다음으로 가장 이해하기에 오래 걸렸던 것이 Redux였는데 나중에 Hook과 집중적으로 다뤄보는 프로젝트를 진행해야겠다는 생각이 들었다.
+
+## **14. 느낀 점**
+
+강의를 참고하면서 만든 이 프로젝트를 하기 전까지 많은 시행착오를 겪었던 것 같다. 파이썬에만 익숙해졌던 나에게 새로운 도전이었고, 또 웹에 대한 지식이 없었던 나에게 새로운 터닝 포인트가 되었던 것 같다. 강의 내용 뿐 아니라 유튜브에서 각종 웹과 관련한 지식에 대해 좀 더 관심을 가지고 보게 되었다. 자바스크립트 기초에 대해 공부하면서 비동기처리, 싱글스레드, ES6 문법, typescript 등의 내용을 자각하게 되었다. http(s), server-client, html, css 등을 알아가면서 웹을 제작하기 위해서는 정말 많은 공부가 필요하다는 것을 느끼게 되었고 한편으로는 공부할 것이 아직 많이 있다는 사실이 조금 흥미롭기도 하였다.
